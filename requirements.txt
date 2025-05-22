@@ -1,0 +1,8 @@
+# Placeholder for requirements.txt
+Django>=4.2.0
+python-dotenv>=1.0.0
+
+Flask
+pandas
+openpyxl
+gunicorn
