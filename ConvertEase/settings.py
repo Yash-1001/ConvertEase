@@ -1,5 +1,9 @@
 import os
 
+import dj_database_url
+
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'your-secret-key'  # Replace with your secret key
@@ -56,11 +60,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ConvertEase.wsgi.application'  # Fixed case to match folder name
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL")
+    )
 }
+
 
 # Static files (CSS, JavaScript)
 STATIC_URL = '/static/'
