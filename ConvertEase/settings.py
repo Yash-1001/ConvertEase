@@ -59,12 +59,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ConvertEase.wsgi.application'  # Fixed case to match folder name
 
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.getenv("DATABASE_URL")
+#     )
+# }
+
+import dj_database_url
+import os
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL")
+    'default': dj_database_url.parse(
+        os.environ.get('DATABASE_URL', 'postgresql://convertease_db_user:T2IiFdRDwzPgYpsVmEKiSR9CN1fbak3n@dpg-d0o56bqli9vc73fmj6t0-a.oregon-postgres.render.com/convertease_db')
     )
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('DB_NAME', 'convertease_db'),
+#         'USER': os.environ.get('DB_USER', 'convertease_db_user'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD', 'T2IiFdRDwzPgYpsVmEKiSR9CN1fbak3n'),
+#         'HOST': os.environ.get('DB_HOST', 'dpg-d0o56bqli9vc73fmj6t0-a'),
+#         'PORT': os.environ.get('DB_PORT', '5432'),
+#     }
+# }
 
 # Static files (CSS, JavaScript)
 STATIC_URL = '/static/'
