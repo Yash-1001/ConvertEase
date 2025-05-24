@@ -77,6 +77,4 @@ ConvertEase/
 
 Contributions are welcome! Please fork the repo and submit a pull request for new features or bug fixes.
 
-## 📜 License
 
-This project is licensed under the [MIT License](LICENSE).
