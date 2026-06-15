@@ -66,13 +66,20 @@ WSGI_APPLICATION = 'ConvertEase.wsgi.application'  # Fixed case to match folder 
 # }
 
 import dj_database_url
-import os
 
-DATABASES = {
-    'default': dj_database_url.parse(
-        os.environ.get('DATABASE_URL', 'postgresql://convertease_db_user:T2IiFdRDwzPgYpsVmEKiSR9CN1fbak3n@dpg-d0o56bqli9vc73fmj6t0-a.oregon-postgres.render.com/convertease_db')
-    )
-}
+# Prefer DATABASE_URL (for production). If not set, use local SQLite for development.
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # DATABASES = {
 #     'default': {
@@ -87,7 +94,7 @@ DATABASES = {
 
 # Static files (CSS, JavaScript)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'core', 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Media files (Uploads)
 MEDIA_URL = '/media/'

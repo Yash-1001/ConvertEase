@@ -33,8 +33,8 @@ def pdf_to_excel_view(request):
 
         pdf_filepath = os.path.join(upload_path, f"{unique_id}.pdf")
         excel_filepath = os.path.join(converted_path, f"{unique_id}.xlsx")
-
-        # Save uploaded PDF
+        
+        
         with open(pdf_filepath, 'wb+') as destination:
             for chunk in pdf_file.chunks():
                 destination.write(chunk)
@@ -42,7 +42,7 @@ def pdf_to_excel_view(request):
         try:
             access_token, client_id = get_adobe_access_token(return_client_id=True)
 
-            # 1. Create asset (upload slot)
+            
             assets_url = "https://pdf-services.adobe.io/assets"
             assets_headers = {
                 "Authorization": f"Bearer {access_token}",
@@ -58,7 +58,7 @@ def pdf_to_excel_view(request):
             upload_url = assets_info["uploadUri"]
             asset_id = assets_info["assetID"]
 
-            # 2. Upload the PDF to the upload URL
+
             with open(pdf_filepath, "rb") as f:
                 upload_resp = requests.put(upload_url, data=f, headers={"Content-Type": "application/pdf"})
                 print("Upload status:", upload_resp.status_code)
@@ -66,7 +66,7 @@ def pdf_to_excel_view(request):
                 upload_resp.raise_for_status()
                 time.sleep(2)
 
-            # 3. Create export job using assetID
+          
             job_url = "https://pdf-services.adobe.io/operation/exportpdf"
             job_headers = {
                 "Authorization": f"Bearer {access_token}",
@@ -88,7 +88,7 @@ def pdf_to_excel_view(request):
             job_response.raise_for_status()
             job_info = job_response.json()
 
-            # 4. Poll for job completion
+           
             status_url = job_info["statusUri"]
             while True:
                 status_resp = requests.get(status_url, headers=job_headers)
@@ -99,9 +99,9 @@ def pdf_to_excel_view(request):
                     break
                 elif status == "failed":
                     return render(request, "core/pdf_to_excel.html", {"error": "Adobe conversion failed."})
-                time.sleep(2)
+                time.sleep(5)
 
-            # 5. Download the result
+            
             result_url = status_json["output"]["uri"]
             result_resp = requests.get(result_url)
             with open(excel_filepath, "wb") as out:
